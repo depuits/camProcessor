@@ -1,0 +1,16 @@
+#camera dump directory
+#DIR="/mnt/cam"
+DIR="/mnt/data/ftp/cameras"
+
+#max time a file is saved in days
+MAXAGE=90
+
+#max space use of $dir (procentual)
+LIMIT="80"
+
+ #mail application
+MAILX="mailx"
+
+#mail variables
+MAILTO="colmanjoeri@gmail.com"
+SUBJECT="$DIR disk usage"
