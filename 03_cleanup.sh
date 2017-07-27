@@ -3,8 +3,7 @@
 
 echo "Starting cleanup"
 
-my_dir="$(dirname "$0")"
-. "$my_dir/config"
+. "${BASH_SOURCE%/*}/config"
 
 #avoid literal string if no files match
 shopt -s nullglob
@@ -16,13 +15,13 @@ for d in ${DIR}/*/; do
 		fileName=${f##*/}
 		echo "Checking $fileName"
 
-		datePart=$(echo "$fileName"|cut -c -8)
+		datePart=${fileName:0:8}
 		#check if we may already process this folder
 		if dds=$(date -d "$datePart" +%s); then #file datestamp
 			nds=$(date +%s) #now datestamp
 			days=$(( (nds - dds)/(60*60*24) ))
 			#we only process the files if they are a day old
-			if [ $days -gt $MAXAGE ]; then
+			if [ $days -gt "$MAXAGE" ]; then
 				# delete files and folders older then MAXAGE days
 				echo "removing '$f', $days days old"
 				rm -f "$f"

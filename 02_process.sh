@@ -4,8 +4,7 @@
 
 echo "Starting processing"
 
-my_dir="$(dirname "$0")"
-. "$my_dir/config"
+. "${BASH_SOURCE%/*}/config"
 
 #avoid literal string if no files match
 shopt -s nullglob
@@ -16,7 +15,7 @@ for d in ${DIR}/*/; do
 	#loop all folders in the current directory
 	for subdir in ${d}*/; do
 		dirName=$(basename "$subdir")
-		datePart=$(echo "$dirName"|cut -c -8)
+		datePart=${dirName:0:8}
 
 		#check if we may already process this folder
 		if dds=$(date -d "$datePart" +%s); then #file datestamp

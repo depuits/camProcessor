@@ -7,8 +7,7 @@
 
 echo "Starting preprocessing"
 
-my_dir="$(dirname "$0")"
-. "$my_dir/config"
+. "${BASH_SOURCE%/*}/config"
 
 #avoid literal string if no files match
 shopt -s nullglob
@@ -21,7 +20,7 @@ for d in ${DIR}/*/; do
 		fileName=${f##*/}
 		echo "Preprocessing $fileName"
 		#parse date and time
-		dts="${fileName//.*_//}"
+		dts="${fileName##*_}"
 
 		yr=${dts:0:4}
 		mo=${dts:4:2}

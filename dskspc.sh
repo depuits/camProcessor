@@ -1,7 +1,6 @@
 #!/bin/bash
 
-my_dir="$(dirname "$0")"
-. "$my_dir/config"
+. "${BASH_SOURCE%/*}/config"
 
 which $MAILX > /dev/null 2>&1 #Here we check if mailx command exist
 
