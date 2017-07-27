@@ -5,7 +5,7 @@ DIR="/mnt/data/ftp/cameras"
 #max time a file is saved in days
 MAXAGE=90
 
-#max space use of $dir (procentual)
+#max space use of $dir (percentual)
 LIMIT="80"
 
  #mail application

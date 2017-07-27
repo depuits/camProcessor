@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. /mnt/data/ftp/scripts/config
+my_dir="$(dirname "$0")"
+. "$my_dir/config"
 
 which $MAILX > /dev/null 2>&1 #Here we check if mailx command exist
 

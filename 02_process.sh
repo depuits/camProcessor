@@ -1,30 +1,44 @@
 #!/bin/bash
-# Script to move all files in a camera directory to a subfolder for its date.
-# Example file: $DIR/006E07957B06_20170330195859.jpg
-# EampleMove: $DIR/20170330/006E07957B06_20170330195859.jpg
-# TODO update script to output date to hour subfolder
+# Script to generate movie output of images per day. 
+# This takes all the jpg in a folder of current date, puts them in a single mkv and then removes them
 
-. /mnt/data/ftp/scripts/config
+echo "Starting processing"
+
+my_dir="$(dirname "$0")"
+. "$my_dir/config"
 
 #avoid literal string if no files match
 shopt -s nullglob
 
 #loop all camera folders
 for d in ${DIR}/*/; do
-	search="$d*.jpg" #file search string
+	echo "Scanning $d"
+	#loop all folders in the current directory
+	for subdir in ${d}*/; do
+		dirName=$(basename "$subdir")
+		datePart=$(echo "$dirName"|cut -c -8)
 
-	#loop all files in the current directory
-	for f in $search; do
-		datetime=$(echo "$f"|sed 's/.*_//')
-		date=$(echo "$datetime"|cut -c -8)
-		dir="${d}${date}"
+		#check if we may already process this folder
+		if dds=$(date -d "$datePart" +%s); then #file datestamp
+			nds=$(date +%s) #now datestamp
+			days=$(( (nds - dds)/(60*60*24) ))
+			#we only process the files if they are a day old
+			if [ $days -ge 1 ]; then
+				echo "processing '$dirName'"
 
-		# create folder and subfolders if yet don't exist
-		mkdir -p "$dir"
-		# and move files in correct sub folders
-		mv "$f" "$dir"
+				dest="${d}${datePart}.mkv"
+				src="${subdir}*.jpg"
 
-		# create movie output
-		mpv mf://*.jpg --mf-fps=12 --ofps=12 --ovc libx264 --ovcopts=threads=2 -o ../outputfile_12fps.mkv
+				# create movie output
+				mpv "mf://$src" --mf-fps=12 --ofps=12 --ovc libx264 --ovcopts=threads=2 -o "$dest"
+
+				#remove the source files because we no longer want them
+				echo "Removing $subdir"
+				#uncomment when tested
+				#rm -rf "$subdir"
+			fi
+		fi
 	done
 done
+
+echo "Processing finished"

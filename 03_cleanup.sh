@@ -1,37 +1,34 @@
 #!/bin/bash
+# Script to remove processed files who have reached their max age.
 
-. /mnt/data/ftp/scripts/config
+echo "Starting cleanup"
+
+my_dir="$(dirname "$0")"
+. "$my_dir/config"
 
 #avoid literal string if no files match
 shopt -s nullglob
 
 #loop all camera folders
 for d in ${DIR}/*/; do
-	search="$d*" # search string
+	#loop all mkv files in the current directory
+	for f in ${d}*.mkv; do
+		fileName=${f##*/}
+		echo "Checking $fileName"
 
-	#loop all files and folders in the current directory
-	for sd in $search; do
-		if [[ "$sd" == *.jpg ]]; then
-			continue
-		fi
-
-		dp=$(basename $sd|cut -c -8) #only take the first 8 characters to make sure there is no extension
-		dds=$(date -d $dp +%s) #file datestamp
-		if [ $? -eq 0 ]; then #check that the folder is a parsable date
+		datePart=$(echo "$fileName"|cut -c -8)
+		#check if we may already process this folder
+		if dds=$(date -d "$datePart" +%s); then #file datestamp
 			nds=$(date +%s) #now datestamp
-
-			days=$(( ($nds - dds)/(60*60*24) ))
+			days=$(( (nds - dds)/(60*60*24) ))
+			#we only process the files if they are a day old
 			if [ $days -gt $MAXAGE ]; then
 				# delete files and folders older then MAXAGE days
-				echo "removing '$sd', $days days old"
-				rm -rf "$sd"
-			elif [ $days -gt 1 ] && [ -d "$sd" ]; then
-				dir=$(dirname $sd)/
-				folder=$(basename $sd)
-				# archive the folders older then a day
-				echo "archiving '$sd'"
-				tar -czf "$sd.tar.gz" -C "$dir" "$folder" --remove-files
+				echo "removing '$f', $days days old"
+				rm -f "$f"
 			fi
 		fi
 	done
 done
+
+echo "Cleanup finished"
