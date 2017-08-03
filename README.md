@@ -35,6 +35,11 @@ The cameras should be set to save in the a tmp folder under a camera folder (`/c
 +
 ```
 
+### Dependencies
+[ImageMagick convert](http://www.imagemagick.org/) - Used to add timestamp onto image.
+
+[MPV](https://mpv.io/) - Used for turning image into an mkv.
+
 ### Scripts description
 
 #### 01_preprocess

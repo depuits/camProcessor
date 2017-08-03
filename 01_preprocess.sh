@@ -37,10 +37,14 @@ for d in ${DIR}/*/; do
 
 		#add the timestamp to the image
 		#find font: https://askubuntu.com/questions/673615/imagemagick-convert-command-cannot-use-fonts
-		convert "$f" -gravity SouthEast -pointsize 22 -font "Liberation-Sans" \
-			-stroke "#000C" -strokewidth 2 -annotate +30+30  "$dateTime" \
-			-stroke  none   -fill white    -annotate +30+30  "$dateTime" \
-			"$f" 
+		convert "$f" -gravity SouthEast -pointsize 22 -font "Nimbus-Sans-L-Bold" \
+			-fill black \
+				-annotate +28+30 "$dateTime" \
+				-annotate +30+28 "$dateTime" \
+				-annotate +32+30 "$dateTime" \
+				-annotate +30+32 "$dateTime" \
+			-fill white -annotate +30+30 "$dateTime" \
+			"$f"
 
 		#and move the file in correct sub folder
 		mv "$f" "$subDir"
