@@ -31,6 +31,9 @@ for d in ${DIR}/*/; do
 				# create movie output
 				mpv "mf://$src" --mf-fps=12 --ofps=12 --ovc libx264 --ovcopts=threads=2 -o "$dest"
 
+				#make sure the file is accessable
+				chmod 777 "$dest"
+
 				#remove the source files because we no longer want them
 				echo "Removing $subdir"
 				#uncomment when tested

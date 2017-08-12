@@ -46,6 +46,9 @@ for d in ${DIR}/*/; do
 			-fill white -annotate +30+30 "$dateTime" \
 			"$f"
 
+		#make sure the file is accessable
+		chmod 777 "$f"
+
 		#and move the file in correct sub folder
 		mv "$f" "$subDir"
 	done
