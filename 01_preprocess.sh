@@ -18,7 +18,7 @@ for d in ${DIR}/*/; do
 	#loop all jpg files in the tmp directory
 	for f in ${d}tmp/*.jpg; do
 		fileName=${f##*/}
-		echo "Preprocessing $fileName"
+		#echo "Preprocessing $fileName"
 		#parse date and time
 		dts="${fileName##*_}"
 
